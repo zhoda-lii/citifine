@@ -45,5 +45,19 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.ViolationId">Edit</a> |
+    <a asp-action="PayFine" asp-route-id="@Model?.ViolationId">Pay Fine</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+<!-- Pay Fine Button -->
+@* <div> *@
+@*     @if (!Model.IsPaid) *@
+@*     { *@
+@*         <form method="post" asp-action="PayFine" asp-route-id="@Model.ViolationId"> *@
+@*             <button type="submit" class="btn btn-success">Pay Fine</button> *@
+@*         </form> *@
+@*     } *@
+@*     else *@
+@*     { *@
+@*         <span class="text-success">This fine has already been paid.</span> *@
+@*     } *@
+@* </div> *@

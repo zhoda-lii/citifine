@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using CitiFine.Areas.Identity.Data;
+using Stripe;
+using CitiFine.Models;
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("CitiFineDbContextConnection") ?? throw new InvalidOperationException("Connection string 'CitiFineDbContextConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("CitiFineDbContextConnection")
+    ?? throw new InvalidOperationException("Connection string 'CitiFineDbContextConnection' not found.");
 
 builder.Services.AddDbContext<CitiFineDbContext>(options => options.UseSqlServer(connectionString));
 
@@ -10,6 +13,11 @@ builder.Services.AddDbContext<CitiFineDbContext>(options => options.UseSqlServer
 builder.Services.AddDefaultIdentity<CitiFineUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<CitiFineDbContext>();
+
+// Stripe Config
+//StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+// Bind Stripe settings
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -36,6 +44,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
