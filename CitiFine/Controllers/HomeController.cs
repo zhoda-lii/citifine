@@ -15,6 +15,12 @@ namespace CitiFine.Controllers
 
         public IActionResult Index()
         {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Violations");
+            }
+
             return View();
         }
 
