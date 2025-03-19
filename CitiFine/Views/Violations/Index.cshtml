@@ -17,6 +17,9 @@
                 @Html.DisplayNameFor(model => model.ViolationType)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.User.LicensePlate)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.FineAmount)
             </th>
             <th>
@@ -37,6 +40,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ViolationType)
             </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.LicensePlate)
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FineAmount)
             </td>
