@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CitiFine.Models.Violation>
+@model IEnumerable<CitiFine.Models.Violation>
 
 @{
     ViewData["Title"] = "Violation List";
@@ -69,9 +69,7 @@
                     {
                         <a asp-action="Details" asp-route-id="@item.ViolationId">Details</a>
                     }
-                @* <a asp-action="Edit" asp-route-id="@item.ViolationId">Edit</a> | *@
-                @* <a asp-action="Details" asp-route-id="@item.ViolationId">Details</a> | *@
-                @* <a asp-action="Delete" asp-route-id="@item.ViolationId">Delete</a> *@
+             
             </td>
         </tr>
 }
