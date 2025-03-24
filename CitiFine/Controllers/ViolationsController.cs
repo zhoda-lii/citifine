@@ -30,8 +30,26 @@ namespace CitiFine.Controllers
         // GET: Violations
         public async Task<IActionResult> Index()
         {
-            var citiFineDbContext = _context.Violations.Include(v => v.User);
-            return View(await citiFineDbContext.ToListAsync());
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            // If the user is an Admin or Officer, show all violations
+            if (User.IsInRole("Administrator") || User.IsInRole("Officer"))
+            {
+                var allViolations = _context.Violations.Include(v => v.User);
+                return View(await allViolations.ToListAsync());
+            }
+            else
+            {
+                // If the user is a regular user, only show their own violations
+                var userViolations = _context.Violations
+                    .Include(v => v.User)
+                    .Where(v => v.UserId == currentUserId);
+
+                return View(await userViolations.ToListAsync());
+            }
+
+            //var citiFineDbContext = _context.Violations.Include(v => v.User);
+            //return View(await citiFineDbContext.ToListAsync());
         }
 
         // GET: Violations/Details/5
