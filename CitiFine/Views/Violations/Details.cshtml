@@ -41,9 +41,24 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ViolationId">Edit</a> |
-    <a asp-action="PayFine" asp-route-id="@Model?.ViolationId">Pay Fine</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (User.IsInRole("Administrator"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.ViolationId">Edit</a>
+        <a asp-action = "PayFine" asp-route-id = "@Model?.ViolationId" > Pay Fine </a> 
+        <a asp-action = "Index" > Back to List</a>
+    }
+    else if (User.IsInRole("Officer"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.ViolationId">Edit</a>
+        <a asp-action="Index"> Back to List</a>
+    }
+    else
+    {
+        <a asp-action="Index"> Back to List</a>
+        <br />
+        <a asp-action="PayFine" asp-route-id="@Model?.ViolationId"> Pay Fine </a>
+    }
+   
 </div>
 <!-- Pay Fine Button -->
 @* <div> *@
