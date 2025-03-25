@@ -273,6 +273,5 @@ namespace CitiFine.Controllers
             // Return true if payment was successful, false otherwise
             return charge.Status == "succeeded";
         }
-
     }
 }

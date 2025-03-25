@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Payment Cancelled";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>You canceled the payment for the violation.</p>
+
+<p><strong>Violation ID:</strong> @ViewBag.ViolationId</p>
+<p>@ViewBag.Message</p>
+
+<a href="@Url.Action("Index", "Home")">Go back to Home</a>
