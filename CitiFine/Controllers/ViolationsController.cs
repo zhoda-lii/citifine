@@ -17,14 +17,16 @@ namespace CitiFine.Controllers
     public class ViolationsController : Controller
     {
         private readonly CitiFineDbContext _context;
+        private readonly EmailService _emailService;
 
         // Inject IOptions<StripeSettings> in the constructor
         private readonly IOptions<StripeSettings> _stripeSettings;
 
-        public ViolationsController(CitiFineDbContext context, IOptions<StripeSettings> stripeSettings)
+        public ViolationsController(CitiFineDbContext context, IOptions<StripeSettings> stripeSettings, EmailService emailService)
         {
             _context = context;
             _stripeSettings = stripeSettings;
+            _emailService = emailService;
         }
 
         // GET: Violations
@@ -97,6 +99,22 @@ namespace CitiFine.Controllers
             {
                 _context.Add(violation);
                 await _context.SaveChangesAsync();
+
+                // Fetch user details
+                var user = await _context.Users.FindAsync(violation.UserId);
+                if (user != null)
+                {
+                    string subject = "New Violation Ticket Issued";
+                    string body = $"Dear {user.FirstName},<br><br>You have received a new violation ticket:<br>" +
+                                  $"<strong>Violation Type:</strong> {violation.ViolationType}<br>" +
+                                  $"<strong>Fine Amount:</strong> {violation.FineAmount:C}<br>" +
+                                  $"<strong>Date Issued:</strong> {violation.DateIssued}<br><br>" +
+                                  $"Please check your Citifine account on how to pay your fine.<br><br>" +
+                                  $"–Citifine Admin";
+
+                    await _emailService.SendEmailAsync(user.Email, subject, body);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", violation.UserId);
