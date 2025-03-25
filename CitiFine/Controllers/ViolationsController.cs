@@ -106,6 +106,7 @@ namespace CitiFine.Controllers
                 {
                     string subject = "New Violation Ticket Issued";
                     string body = $"Dear {user.FirstName},<br><br>You have received a new violation ticket:<br>" +
+                                  $"<strong>Violation ID:</strong> {violation.ViolationId}<br>" +
                                   $"<strong>Violation Type:</strong> {violation.ViolationType}<br>" +
                                   $"<strong>Fine Amount:</strong> {violation.FineAmount:C}<br>" +
                                   $"<strong>Date Issued:</strong> {violation.DateIssued}<br><br>" +

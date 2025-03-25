@@ -11,6 +11,12 @@
     <h4>Violation</h4>
     <hr />
     <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ViolationId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ViolationId)
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ViolationType)
         </dt>
@@ -21,7 +27,7 @@
             @Html.DisplayNameFor(model => model.FineAmount)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FineAmount)
+            $@Html.DisplayFor(model => model.FineAmount)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DateIssued)
@@ -29,9 +35,6 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.DateIssued)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IsPaid)
         </dt>
@@ -44,31 +47,22 @@
     @if (User.IsInRole("Administrator"))
     {
         <a asp-action="Edit" asp-route-id="@Model?.ViolationId">Edit</a>
-        <a asp-action = "PayFine" asp-route-id = "@Model?.ViolationId" > Pay Fine </a> 
-        <a asp-action = "Index" > Back to List</a>
+        <a asp-action="Index">Back to List</a>
     }
     else if (User.IsInRole("Officer"))
     {
         <a asp-action="Edit" asp-route-id="@Model?.ViolationId">Edit</a>
-        <a asp-action="Index"> Back to List</a>
+        <a asp-action="Index">Back to List</a>
     }
     else
     {
-        <a asp-action="Index"> Back to List</a>
-        <a asp-action="PayFine" asp-route-id="@Model?.ViolationId"> Pay Fine </a>
+        @if (!Model.IsPaid)
+        {
+            @* <a asp-action="PayFine" asp-route-id="@Model?.ViolationId">Pay Fine</a> *@
+            <form method="post" action="@Url.Action("CreateCheckoutSession", "Payment", new { violationId = Model.ViolationId })">
+                <button type="submit">Pay Fine</button>
+            </form>
+        }
+        <a asp-action="Index">Back to List</a>
     }
-   
 </div>
-<!-- Pay Fine Button -->
-@* <div> *@
-@*     @if (!Model.IsPaid) *@
-@*     { *@
-@*         <form method="post" asp-action="PayFine" asp-route-id="@Model.ViolationId"> *@
-@*             <button type="submit" class="btn btn-success">Pay Fine</button> *@
-@*         </form> *@
-@*     } *@
-@*     else *@
-@*     { *@
-@*         <span class="text-success">This fine has already been paid.</span> *@
-@*     } *@
-@* </div> *@
