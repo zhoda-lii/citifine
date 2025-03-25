@@ -10,7 +10,7 @@
 @if (User.IsInRole("Administrator") || User.IsInRole("Officer"))
 {
     <p>
-        <a asp-action="Create">Create Violation Ticket</a>
+        <a asp-action="Create" class="btn btn-light-green btn-sm">Create Violation Ticket</a>
     </p>
 }
 
@@ -50,18 +50,18 @@
                 <td>
                     @if (User.IsInRole("Administrator"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.ViolationId">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.ViolationId">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.ViolationId">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.ViolationId" class="btn btn-light-green btn-sm" >Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.ViolationId" class="btn-custom-yellow btn-sm" style="text-decoration: none;">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.ViolationId" class="btn btn-custom-red btn-sm">Delete</a>
                     }
                     else if (User.IsInRole("Officer"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.ViolationId">Edit</a> 
-                        <a asp-action="Details" asp-route-id="@item.ViolationId">Details</a>
+                        <a asp-action="Edit" asp-route-id="@item.ViolationId" class="btn btn-light-green btn-sm">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.ViolationId" class="btn-custom-yellow btn-sm">Details</a>
                     }
                     else
                     {
-                        <a asp-action="Details" asp-route-id="@item.ViolationId">Details</a>
+                        <a asp-action="Details" asp-route-id="@item.ViolationId" class="btn-custom-yellow btn-sm">Details</a>
                     }
              
             </td>
