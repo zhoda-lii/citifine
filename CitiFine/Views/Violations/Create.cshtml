@@ -7,11 +7,20 @@
 
 <h1>Create</h1>
 
-<h4>Violation</h4>
+<h4>Violation Ticket</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <!-- License Plate Selection -->
+        <form asp-action="Create" method="get">
+            <div class="form-group">
+                <label class="control-label">License Plate</label>
+                <select class="form-control" name="licensePlate" asp-items="ViewBag.LicensePlates" onchange="this.form.submit();"></select>
+            </div>
+        </form>
+
+        <!-- Violation Form -->
+        <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label">Violation Type</label>
@@ -28,9 +37,9 @@
                 <input asp-for="DateIssued" class="form-control" />
                 <span asp-validation-for="DateIssued" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div hidden class="form-group">
                 <label class="control-label">User ID</label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
             </div>
             <br />
             <div class="form-group">

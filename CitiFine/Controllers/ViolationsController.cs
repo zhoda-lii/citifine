@@ -18,8 +18,6 @@ namespace CitiFine.Controllers
     {
         private readonly CitiFineDbContext _context;
         private readonly EmailService _emailService;
-
-        // Inject IOptions<StripeSettings> in the constructor
         private readonly IOptions<StripeSettings> _stripeSettings;
 
         public ViolationsController(CitiFineDbContext context, IOptions<StripeSettings> stripeSettings, EmailService emailService)
@@ -72,15 +70,24 @@ namespace CitiFine.Controllers
 
         // GET: Violations/Create
         [Authorize(Policy = "RequireOfficer")]
-        public IActionResult Create()
+        public IActionResult Create(string? licensePlate = null)
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            // Retrieve users with license plates
+            ViewBag.LicensePlates = new SelectList(_context.Users
+                .Where(u => !string.IsNullOrEmpty(u.LicensePlate))
+                .Select(u => new { u.LicensePlate, Display = u.LicensePlate })
+                .Distinct(), "LicensePlate", "Display", licensePlate);
+
+            // Find the user associated with the selected license plate
+            var selectedUser = _context.Users.FirstOrDefault(u => u.LicensePlate == licensePlate);
+
+            // Populate UserId dropdown based on the selected license plate
+            ViewBag.UserId = new SelectList(_context.Users, "Id", "Id", selectedUser?.Id);
+
             return View();
         }
 
         // POST: Violations/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "RequireOfficer")]
