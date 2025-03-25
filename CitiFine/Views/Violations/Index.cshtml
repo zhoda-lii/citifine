@@ -17,27 +17,21 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.User.LicensePlate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ViolationType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FineAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateIssued)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPaid)
-            </th>
-            <th></th>
+            <th>Violation ID</th>
+            <th>License Plate</th>
+            <th>Violation Type</th>
+            <th>Fine Amount</th>
+            <th>Date Issued</th>
+            <th>Paid</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model) {
             <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ViolationId)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.User.LicensePlate)
                 </td>
@@ -45,7 +39,7 @@
                     @Html.DisplayFor(modelItem => item.ViolationType)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FineAmount)
+                    $@Html.DisplayFor(modelItem => item.FineAmount)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DateIssued)

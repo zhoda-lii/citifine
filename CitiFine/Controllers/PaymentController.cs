@@ -44,7 +44,8 @@ public class PaymentController : Controller
                         Currency = "cad",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
-                            Name = (string) violation.ViolationType,
+                            Name = "Violation Type: " + violation.ViolationType.ToString(),
+                            Description = "Payment For Violation ID: " + violation.ViolationId.ToString()
                         },
                     },
                     Quantity = 1,
