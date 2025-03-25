@@ -29,6 +29,11 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireOfficer", policy => policy.RequireRole("Officer"));
 });
 
+// Inject the Email Service
+builder.Services.AddTransient<EmailService>();
+
+
+// Building the app
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
