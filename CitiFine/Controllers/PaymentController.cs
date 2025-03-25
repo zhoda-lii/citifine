@@ -4,22 +4,27 @@ using Stripe;
 using Microsoft.EntityFrameworkCore;
 using CitiFine.Areas.Identity.Data;
 using CitiFine.Models;
+using Microsoft.Extensions.Options;
 
 public class PaymentController : Controller
-    {
+{
     private readonly CitiFineDbContext _context;
-    public PaymentController(CitiFineDbContext context)
+    private readonly IOptions<StripeSettings> _stripeSettings;
+
+    public PaymentController(CitiFineDbContext context, IOptions<StripeSettings> stripeSettings)
     {
         _context = context;
-        StripeConfiguration.ApiKey = "sk_test_51R0wbJ2cWP9xDke2x906NQGPzi6TNxh7S0mNLNq3GLv39C6IOMJXh9x4aHdgQDnqUL2gatnpcf95gBvA90Bv9Hri00odpdkIw8"; // Secret Key from Stripe Dashboard
+        _stripeSettings = stripeSettings;
+
+        StripeConfiguration.ApiKey = _stripeSettings.Value.SecretKey;
     }
 
-public IActionResult Index(int violationId)
+    public IActionResult Index(int violationId)
     {
         return RedirectToAction("Details", "Violations", new { id = violationId });
     }
 
-  public async Task<IActionResult> CreateCheckoutSession(int violationId)
+    public async Task<IActionResult> CreateCheckoutSession(int violationId)
     {
         var violation = await _context.Violations
             .FirstOrDefaultAsync(v => v.ViolationId == violationId);
@@ -39,7 +44,7 @@ public IActionResult Index(int violationId)
                         Currency = "cad",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
-                            Name = "Fine Payment for Violation",
+                            Name = (string) violation.ViolationType,
                         },
                     },
                     Quantity = 1,
@@ -55,6 +60,7 @@ public IActionResult Index(int violationId)
 
         return Redirect(session.Url); // Redirect to the Stripe Checkout page
     }
+
     public async Task<IActionResult> PaymentSuccess(int violationId)
     {
         var violation = await _context.Violations.FindAsync(violationId);
@@ -66,21 +72,24 @@ public IActionResult Index(int violationId)
             await _context.SaveChangesAsync();
         }
 
-        // Pass the violation ID and a success message to the view
         ViewBag.ViolationId = violationId;
         ViewBag.Message = "The payment was successfully processed. Thank you for your payment.";
 
-        return View(); // This will automatically look for PaymentSuccess.cshtml
+        return View();
     }
 
     public async Task<IActionResult> PaymentCancel(int violationId)
     {
         var violation = await _context.Violations.FindAsync(violationId);
+
         if (violation == null)
         {
             return NotFound();
         }
-        ViewBag.Message = "You canceled the payment. The fine is still unpaid.";
+
+        ViewBag.ViolationId = violationId;
+        ViewBag.Message = "You cancelled the payment. The fine is still unpaid.";
+
         return View();
     }
 }

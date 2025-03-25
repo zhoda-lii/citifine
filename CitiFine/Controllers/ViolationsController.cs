@@ -236,60 +236,8 @@ namespace CitiFine.Controllers
                 return NotFound();
             }
 
-            ViewData["StripePublishableKey"] = _stripeSettings.Value.PublishableKey; // Ensure it's set here
-
             // Pass the violation details (e.g., fine amount) to the payment page
             return View(violation);
-        }
-
-        // POST: Violations/PayFine/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PayFine(int id, string stripeToken)
-        {
-            var violation = await _context.Violations.FindAsync(id);
-            if (violation == null)
-            {
-                return NotFound();
-            }
-
-            // Here, you would integrate the Stripe payment logic
-            var paymentSuccess = await ProcessPayment(stripeToken, violation.FineAmount);
-
-            if (paymentSuccess)
-            {
-                // Mark the violation as paid if payment was successful
-                violation.IsPaid = true;
-                _context.Update(violation);
-                await _context.SaveChangesAsync();
-
-                // Redirect to the details page with the payment status
-                return RedirectToAction(nameof(Details), new { id = violation.ViolationId });
-            }
-
-            // Handle payment failure (optional)
-            ModelState.AddModelError("", "Payment failed. Please try again.");
-            return View(violation);
-        }
-
-        private async Task<bool> ProcessPayment(string stripeToken, decimal fineAmount)
-        {
-            // Initialize Stripe with the SecretKey from appsettings.json
-            StripeConfiguration.ApiKey = _stripeSettings.Value.SecretKey;
-
-            var chargeOptions = new ChargeCreateOptions
-            {
-                Amount = (long)(fineAmount * 100),  // Stripe accepts amounts in cents
-                Currency = "cad",  // Use appropriate currency
-                Description = "Payment for violation fine",
-                Source = stripeToken,  // Stripe token passed from client
-            };
-
-            var chargeService = new ChargeService();
-            var charge = await chargeService.CreateAsync(chargeOptions);
-
-            // Return true if payment was successful, false otherwise
-            return charge.Status == "succeeded";
         }
     }
 }
