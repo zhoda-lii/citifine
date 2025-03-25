@@ -5,12 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Violation Records</h1>
 
 @if (User.IsInRole("Administrator") || User.IsInRole("Officer"))
 {
     <p>
-        <a asp-action="Create">Create New</a>
+        <a asp-action="Create">Create Violation Ticket</a>
     </p>
 }
 

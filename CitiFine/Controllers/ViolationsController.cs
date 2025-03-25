@@ -72,6 +72,19 @@ namespace CitiFine.Controllers
         [Authorize(Policy = "RequireOfficer")]
         public IActionResult Create(string? licensePlate = null)
         {
+            // List of violation types
+            var violationTypes = new List<string>
+            {
+                "Speeding",
+                "Red Light",
+                "Stop Sign Violation",
+                "Illegal Parking",
+                "Distracted Driving"
+            };
+
+            // Passing violation types to the view
+            ViewBag.ViolationTypes = new SelectList(violationTypes);
+
             // Retrieve users with license plates
             ViewBag.LicensePlates = new SelectList(_context.Users
                 .Where(u => !string.IsNullOrEmpty(u.LicensePlate))
@@ -81,7 +94,7 @@ namespace CitiFine.Controllers
             // Find the user associated with the selected license plate
             var selectedUser = _context.Users.FirstOrDefault(u => u.LicensePlate == licensePlate);
 
-            // Populate UserId dropdown based on the selected license plate
+            // Populate UserId hidden dropdown based on the selected license plate
             ViewBag.UserId = new SelectList(_context.Users, "Id", "Id", selectedUser?.Id);
 
             return View();
@@ -124,6 +137,19 @@ namespace CitiFine.Controllers
         [Authorize(Policy = "RequireOfficer")]
         public async Task<IActionResult> Edit(int? id)
         {
+            // List of violation types
+            var violationTypes = new List<string>
+            {
+                "Speeding",
+                "Red Light",
+                "Stop Sign Violation",
+                "Illegal Parking",
+                "Distracted Driving"
+            };
+
+            // Passing violation types to the view
+            ViewBag.ViolationTypes = new SelectList(violationTypes);
+
             if (id == null)
             {
                 return NotFound();

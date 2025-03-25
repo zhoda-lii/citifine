@@ -9,7 +9,7 @@ namespace CitiFine.Models
         public int ViolationId { get; set; }
 
         [Required(ErrorMessage = "Please enter a violation type.")]
-        public string ViolationType { get; set; } // Red Light, Speeding, Parking
+        public string ViolationType { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
