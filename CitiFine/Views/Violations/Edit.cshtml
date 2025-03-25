@@ -16,7 +16,7 @@
             <input type="hidden" asp-for="ViolationId" />
             <div class="form-group">
                 <label class="control-label">Violation Type</label>
-                <input asp-for="ViolationType" class="form-control" />
+                <select asp-for="ViolationType" class="form-control" asp-items="ViewBag.ViolationTypes"></select>
                 <span asp-validation-for="ViolationType" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -29,11 +29,12 @@
                 <input asp-for="DateIssued" class="form-control" />
                 <span asp-validation-for="DateIssued" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div hidden class="form-group">
                 <label class="control-label">User ID</label>
                 <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsPaid" /> Paid

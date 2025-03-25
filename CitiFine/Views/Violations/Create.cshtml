@@ -24,7 +24,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label">Violation Type</label>
-                <input asp-for="ViolationType" class="form-control" />
+                <select asp-for="ViolationType" class="form-control" asp-items="ViewBag.ViolationTypes"></select>
                 <span asp-validation-for="ViolationType" class="text-danger"></span>
             </div>
             <div class="form-group">
