@@ -49,9 +49,6 @@ namespace CitiFine.Controllers
 
                 return View(await userViolations.ToListAsync());
             }
-
-            //var citiFineDbContext = _context.Violations.Include(v => v.User);
-            //return View(await citiFineDbContext.ToListAsync());
         }
 
         // GET: Violations/Details/5
@@ -69,12 +66,6 @@ namespace CitiFine.Controllers
             {
                 return NotFound();
             }
-
-            //// Access Publishable Key from _stripeSettings
-            //var stripePublishableKey = _stripeSettings.Value.PublishableKey;
-
-            //// Pass the key to the view
-            //ViewData["StripePublishableKey"] = stripePublishableKey;
 
             return View(violation);
         }
@@ -110,7 +101,7 @@ namespace CitiFine.Controllers
                                   $"<strong>Violation Type:</strong> {violation.ViolationType}<br>" +
                                   $"<strong>Fine Amount:</strong> {violation.FineAmount:C}<br>" +
                                   $"<strong>Date Issued:</strong> {violation.DateIssued}<br><br>" +
-                                  $"Please check your Citifine account on how to pay your fine.<br><br>" +
+                                  $"To pay your fine, please go to your account and navigate to violation details.<br><br>" +
                                   $"–Citifine Admin";
 
                     await _emailService.SendEmailAsync(user.Email, subject, body);
@@ -237,7 +228,7 @@ namespace CitiFine.Controllers
                 return NotFound();
             }
 
-            // Pass the violation details (e.g., fine amount) to the payment page
+            // Pass the violation details to the payment page
             return View(violation);
         }
     }
