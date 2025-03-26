@@ -122,6 +122,8 @@ namespace CitiFine.Controllers
                                   $"<strong>Fine Amount:</strong> {violation.FineAmount:C}<br>" +
                                   $"<strong>Date Issued:</strong> {violation.DateIssued}<br><br>" +
                                   $"To pay your fine, please go to your account and navigate to violation details.<br><br>" +
+                                  $"If you believe this violation was issued in error, you have the right to dispute it.<br><br>" +
+                                  $"You may request a review of evidence or file an appeal through appropriate legal channels.<br><br>" +
                                   $"–Citifine Admin";
 
                     await _emailService.SendEmailAsync(user.Email, subject, body);

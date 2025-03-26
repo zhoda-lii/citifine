@@ -33,7 +33,13 @@
             Date Issued
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateIssued)
+            @Model.DateIssued.ToString("yyyy-MM-dd hh:mm tt")
+        </dd>
+        <dt class="col-sm-2">
+            Payment Deadline
+        </dt>
+        <dd class="col-sm-10">
+            @Model.DateIssued.AddMonths(1).ToString("yyyy-MM-dd hh:mm tt")
         </dd>
         <dt class = "col-sm-2">
             Paid
@@ -64,9 +70,17 @@
     {
         @if (!Model.IsPaid)
         {
+            var paymentDeadline = Model.DateIssued.AddMonths(1);
+            var isLate = DateTime.Now > paymentDeadline;
+
             <form method="post" action="@Url.Action("CreateCheckoutSession", "Payment", new { violationId = Model.ViolationId })">
-                <button type="submit">Pay Fine</button>
+                <button type="submit" class="btn btn-primary" @(isLate ? "disabled" : "")>Pay Fine</button>
             </form>
+
+            @if (isLate)
+            {
+                <p class="text-danger mt-2"><strong>This fine is overdue.</strong> Please proceed to the Traffic Violations Office to settle your payment as soon as possible.</p>
+            }
         }
         <a asp-action="Index">Back to List</a>
     }

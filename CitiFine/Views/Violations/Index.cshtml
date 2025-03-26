@@ -22,6 +22,7 @@
             <th>Violation Type</th>
             <th>Fine Amount</th>
             <th>Date Issued</th>
+            <th>Payment Deadline</th>
             <th>Paid</th>
             <th>Actions</th>
         </tr>
@@ -42,7 +43,10 @@
                     $@Html.DisplayFor(modelItem => item.FineAmount)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateIssued)
+                    @item.DateIssued.ToString("yyyy-MM-dd hh:mm tt")
+                </td>
+                <td>
+                    @item.DateIssued.AddMonths(1).ToString("yyyy-MM-dd hh:mm tt")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.IsPaid)
