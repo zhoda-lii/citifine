@@ -20,3 +20,39 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/*Buttomn Styling*/
+.btn-light-green {
+    background-color: #4cd964; /* Light green color */
+    border-color: #4cd964;
+    color: white;
+}
+
+    .btn-light-green:hover {
+        background-color: #45c65a;
+        border-color: #45c65a;
+    }
+
+.btn-custom-yellow {
+    background-color: #f1c40f; /* Yellow */
+    border-color: #f1c40f;
+    color: white;
+}
+
+    .btn-custom-yellow:hover {
+        background-color: #d4ac0d;
+        border-color: #d4ac0d;
+        text-decoration: none !important;
+    }
+
+.btn-custom-red {
+    background-color: #e74c3c; /* Custom red */
+    border-color: #e74c3c;
+    color: white;
+}
+
+    .btn-custom-red:hover {
+        background-color: #c0392b;
+        border-color: #c0392b;
+    }
+
