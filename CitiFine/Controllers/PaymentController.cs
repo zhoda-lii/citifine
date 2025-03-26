@@ -9,12 +9,14 @@ using Microsoft.Extensions.Options;
 public class PaymentController : Controller
 {
     private readonly CitiFineDbContext _context;
+    private readonly EmailService _emailService;
     private readonly IOptions<StripeSettings> _stripeSettings;
 
-    public PaymentController(CitiFineDbContext context, IOptions<StripeSettings> stripeSettings)
+    public PaymentController(CitiFineDbContext context, IOptions<StripeSettings> stripeSettings, EmailService emailService)
     {
         _context = context;
         _stripeSettings = stripeSettings;
+        _emailService = emailService;
 
         StripeConfiguration.ApiKey = _stripeSettings.Value.SecretKey;
     }
@@ -71,6 +73,24 @@ public class PaymentController : Controller
             violation.IsPaid = true; // Mark as paid
             _context.Update(violation);
             await _context.SaveChangesAsync();
+
+            // Fetch user details and send email notification
+            var user = await _context.Users.FindAsync(violation.UserId);
+            if (user != null)
+            {
+                string subject = "Payment Confirmation for Violation Ticket";
+                string body = $"Dear {user.FirstName},<br><br>" +
+                               $"We have received your payment for Violation Ticket <strong>{violation.ViolationId}</strong>.<br>" +
+                               $"<strong>Violation Type:</strong> {violation.ViolationType}<br>" +
+                               $"<strong>Fine Amount:</strong> {violation.FineAmount:C}<br>" +
+                               $"<strong>Date Issued:</strong> {violation.DateIssued}<br>" +
+                               $"<strong>Date Paid:</strong> {DateTime.Now}<br><br>" +
+                               "Thank you for resolving this matter.<br><br>" +
+                               "–Citifine Admin";
+
+                await _emailService.SendEmailAsync(user.Email, subject, body);
+            }
+
         }
 
         ViewBag.ViolationId = violationId;
