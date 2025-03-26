@@ -70,9 +70,17 @@
     {
         @if (!Model.IsPaid)
         {
+            var paymentDeadline = Model.DateIssued.AddMonths(1);
+            var isLate = DateTime.Now > paymentDeadline;
+
             <form method="post" action="@Url.Action("CreateCheckoutSession", "Payment", new { violationId = Model.ViolationId })">
-                <button type="submit">Pay Fine</button>
+                <button type="submit" class="btn btn-primary" @(isLate ? "disabled" : "")>Pay Fine</button>
             </form>
+
+            @if (isLate)
+            {
+                <p class="text-danger mt-2"><strong>This fine is overdue.</strong> Please proceed to the Traffic Violations Office to settle your payment as soon as possible.</p>
+            }
         }
         <a asp-action="Index">Back to List</a>
     }
