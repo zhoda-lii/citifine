@@ -121,6 +121,7 @@ namespace CitiFine.Controllers
                                   $"<strong>Violation Type:</strong> {violation.ViolationType}<br>" +
                                   $"<strong>Fine Amount:</strong> {violation.FineAmount:C}<br>" +
                                   $"<strong>Date Issued:</strong> {violation.DateIssued}<br><br>" +
+                                  $"<strong>Payment Deadline:</strong> {violation.DateIssued.AddMonths(1)}<br><br>" +
                                   $"To pay your fine, please go to your account and navigate to violation details.<br><br>" +
                                   $"If you believe this violation was issued in error, you have the right to dispute it.<br><br>" +
                                   $"You may request a review of evidence or file an appeal through appropriate legal channels.<br><br>" +
@@ -137,7 +138,7 @@ namespace CitiFine.Controllers
 
         // GET: Violations/Edit/5
         [Authorize(Policy = "RequireOfficer")]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, string? licensePlate = null)
         {
             // List of violation types
             var violationTypes = new List<string>
@@ -152,6 +153,14 @@ namespace CitiFine.Controllers
             // Passing violation types to the view
             ViewBag.ViolationTypes = new SelectList(violationTypes);
 
+            // Retrieve users with license plates
+            var usersWithLicensePlates = _context.Users
+                .Where(u => !string.IsNullOrEmpty(u.LicensePlate))
+                .Select(u => new { u.LicensePlate, Display = u.LicensePlate })
+                .Distinct()
+                .ToList();
+
+            // Find the violation if the id is provided
             if (id == null)
             {
                 return NotFound();
@@ -162,7 +171,19 @@ namespace CitiFine.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", violation.UserId);
+
+            // Get the LicensePlate of the UserId associated with the violation
+            var userLicensePlate = _context.Users
+                .Where(u => u.Id == violation.UserId)
+                .Select(u => u.LicensePlate)
+                .FirstOrDefault();
+
+            // Set ViewBag.LicensePlates with preselected LicensePlate
+            ViewBag.LicensePlates = new SelectList(usersWithLicensePlates, "LicensePlate", "Display", userLicensePlate);
+
+            // Populate the UserId dropdown with the selected user
+            ViewBag.UserId = new SelectList(_context.Users, "Id", "Id", violation.UserId);
+
             return View(violation);
         }
 

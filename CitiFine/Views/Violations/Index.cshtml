@@ -54,8 +54,8 @@
                 <td>
                     @if (User.IsInRole("Administrator"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.ViolationId" class="btn btn-light-green btn-sm" >Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.ViolationId" class="btn-custom-yellow btn-sm" style="text-decoration: none;">Details</a>
+                        <a asp-action="Edit" asp-route-id="@item.ViolationId" class="btn btn-light-green btn-sm">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.ViolationId" class="btn-custom-yellow btn-sm">Details</a>
                         <a asp-action="Delete" asp-route-id="@item.ViolationId" class="btn btn-custom-red btn-sm">Delete</a>
                     }
                     else if (User.IsInRole("Officer"))

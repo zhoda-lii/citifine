@@ -11,6 +11,13 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <!-- License Plate (Static) -->
+        <form asp-action="Edit" method="get">
+            <div class="form-group">
+                <label class="control-label">License Plate</label>
+                <select disabled class="form-control" name="licensePlate" asp-items="ViewBag.LicensePlates" onchange="this.form.submit();"></select>
+            </div>
+        </form>
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ViolationId" />
