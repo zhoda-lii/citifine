@@ -77,18 +77,18 @@ namespace CitiFine.Areas.Identity.Pages.Account
         {
             [Required]
             [StringLength(255, ErrorMessage = "First name should have a maximum of 255 characters.")]
-            [Display(Name = "FirstName")]
+            [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
             [Required]
             [StringLength(255, ErrorMessage = "Last name should have a maximum of 255 characters.")]
-            [Display(Name = "LastName")]
+            [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
             [Required]
             [StringLength(7, MinimumLength = 3, ErrorMessage = "License plate should have 3 to 7 characters.")]
             [RegularExpression(@"^[a-zA-Z0-9]*$", ErrorMessage = "License plate can only contain letters and numbers.")]
-            [Display(Name = "LicensePlate")]
+            [Display(Name = "License Plate")]
             public string LicensePlate { get; set; }
 
             /// <summary>

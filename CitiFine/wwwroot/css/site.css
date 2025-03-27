@@ -1,26 +1,46 @@
+/* site.css */
+
+/* Global Styles */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
+body {
+    font-family: 'Poppins', sans-serif;
+    padding-top: 120px;
+}
+
+.container {
+    flex: 1;
+}
+
+/* Footer Styling */
+footer {
+    background-color: #172D44;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Button Focus Styles */
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* Navbar and Footer Color */
 .navbar-nav .nav-link, .navbar-brand, footer {
     color: #e1e1e1 !important;
 }
 
+/* Button Primary and Secondary Styles */
 .btn-primary {
     color: #fff;
     background-color: #215f9c;
@@ -33,10 +53,39 @@ html {
     border-color: #5e9bd1;
 }
 
+/* Heading Styles */
 h1, h2, h3, h4, h5, h6 {
     color: #172D44;
 }
 
+/* Control Label Styling */
 .control-label {
     margin-top: 20px !important;
+}
+
+/* Full Page Layout Styles */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Violation Row Styles */
+.violation-row {
+    cursor: pointer;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.violation-row:hover {
+    transform: scale(1.02);
+    box-shadow: 3px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Sortable Column Header Styles */
+.sortable {
+    cursor: pointer;
 }
