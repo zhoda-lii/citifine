@@ -7,7 +7,7 @@
 
 <h1>Edit</h1>
 
-<h4>Violation</h4>
+<h4>Violation ID: @Html.DisplayFor(model => model.ViolationId)</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -50,13 +50,10 @@
             <br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
