@@ -24,8 +24,4 @@
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\images\RedDeerLogo.png" />
-  </ItemGroup>
-
 </Project>
