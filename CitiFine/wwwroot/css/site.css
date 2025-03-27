@@ -17,42 +17,26 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+.navbar-nav .nav-link, .navbar-brand, footer {
+    color: #e1e1e1 !important;
 }
 
-/*Buttomn Styling*/
-.btn-light-green {
-    background-color: #4cd964; /* Light green color */
-    border-color: #4cd964;
-    color: white;
+.btn-primary {
+    color: #fff;
+    background-color: #215f9c;
+    border-color: #215f9c;
 }
 
-    .btn-light-green:hover {
-        background-color: #45c65a;
-        border-color: #45c65a;
-    }
-
-.btn-custom-yellow {
-    background-color: #f1c40f; /* Yellow */
-    border-color: #f1c40f;
-    color: white;
+.btn-secondary {
+    color: #fff;
+    background-color: #5e9bd1;
+    border-color: #5e9bd1;
 }
 
-    .btn-custom-yellow:hover {
-        background-color: #d4ac0d;
-        border-color: #d4ac0d;
-        text-decoration: none !important;
-    }
-
-.btn-custom-red {
-    background-color: #e74c3c; /* Custom red */
-    border-color: #e74c3c;
-    color: white;
+h1, h2, h3, h4, h5, h6 {
+    color: #172D44;
 }
 
-    .btn-custom-red:hover {
-        background-color: #c0392b;
-        border-color: #c0392b;
-    }
-
+.control-label {
+    margin-top: 20px !important;
+}

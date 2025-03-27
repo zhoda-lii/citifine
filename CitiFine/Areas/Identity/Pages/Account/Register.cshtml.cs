@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace CitiFine.Areas.Identity.Pages.Account
 {
@@ -30,13 +31,15 @@ namespace CitiFine.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<CitiFineUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly CitiFineDbContext _context;
 
         public RegisterModel(
             UserManager<CitiFineUser> userManager,
             IUserStore<CitiFineUser> userStore,
             SignInManager<CitiFineUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            CitiFineDbContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +47,7 @@ namespace CitiFine.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         /// <summary>
@@ -82,7 +86,8 @@ namespace CitiFine.Areas.Identity.Pages.Account
             public string LastName { get; set; }
 
             [Required]
-            [StringLength(6, ErrorMessage = "License plate should have a maximum of 7 characters.")]
+            [StringLength(7, MinimumLength = 3, ErrorMessage = "License plate should have 3 to 7 characters.")]
+            [RegularExpression(@"^[a-zA-Z0-9]*$", ErrorMessage = "License plate can only contain letters and numbers.")]
             [Display(Name = "LicensePlate")]
             public string LicensePlate { get; set; }
 
@@ -128,13 +133,24 @@ namespace CitiFine.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                // Check if the LicensePlate is already taken
+                var existingUser = await _context.Users
+                    .AnyAsync(u => u.LicensePlate == Input.LicensePlate);
+
+                if (existingUser)
+                {
+                    // Add an error if the license plate is taken
+                    ModelState.AddModelError("Input.LicensePlate", "This license plate is already registered.");
+                    return Page();
+                }
+
                 var user = CreateUser();
 
 
                 // Assign firstname, lastname, and licenseplate fields
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-                user.LicensePlate = Input.LicensePlate;
+                user.LicensePlate = Input.LicensePlate.ToUpper(); // Convert LicensePlate to uppercase
 
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);

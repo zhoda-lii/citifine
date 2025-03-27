@@ -3,73 +3,79 @@
 @{
     ViewData["Title"] = "Violation List";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    bool showActions = User.IsInRole("Administrator") || User.IsInRole("Officer");
 }
 
 <h1>Violation Records</h1>
 
-@if (User.IsInRole("Administrator") || User.IsInRole("Officer"))
+@if (showActions)
 {
     <p>
-        <a asp-action="Create" class="btn btn-light-green btn-sm">Create Violation Ticket</a>
+        <a asp-action="Create" class="btn btn-primary">Create Violation Ticket</a>
     </p>
 }
 
-<table class="table">
-    <thead>
+<table class="table table-hover" id="violationTable">
+    <thead class="table-dark">
         <tr>
-            <th>Violation ID</th>
-            <th>License Plate</th>
-            <th>Violation Type</th>
-            <th>Fine Amount</th>
-            <th>Date Issued</th>
-            <th>Payment Deadline</th>
-            <th>Paid</th>
-            <th>Actions</th>
+            <th class="sortable" data-column="ViolationId">Violation ID <i class="fas fa-sort"></i></th>
+            <th class="sortable" data-column="LicensePlate">License Plate <i class="fas fa-sort"></i></th>
+            <th class="sortable" data-column="ViolationType">Violation Type <i class="fas fa-sort"></i></th>
+            <th class="sortable" data-column="FineAmount">Fine Amount <i class="fas fa-sort"></i></th>
+            <th class="sortable" data-column="DateIssued">Date Issued <i class="fas fa-sort"></i></th>
+            <th class="" data-column="PaymentDeadline">Payment Deadline</th>
+            <th class="" data-column="Paid">Paid</th>
+            @if (User.IsInRole("Administrator") || User.IsInRole("Officer"))
+            {
+                <th>Actions</th>
+            }
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ViolationId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.LicensePlate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ViolationType)
-                </td>
-                <td>
-                    $@Html.DisplayFor(modelItem => item.FineAmount)
-                </td>
-                <td>
-                    @item.DateIssued.ToString("yyyy-MM-dd hh:mm tt")
-                </td>
-                <td>
-                    @item.DateIssued.AddMonths(1).ToString("yyyy-MM-dd hh:mm tt")
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsPaid)
-                </td>
-                <td>
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.ViolationId" class="btn btn-light-green btn-sm">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.ViolationId" class="btn-custom-yellow btn-sm">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.ViolationId" class="btn btn-custom-red btn-sm">Delete</a>
-                    }
-                    else if (User.IsInRole("Officer"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.ViolationId" class="btn btn-light-green btn-sm">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.ViolationId" class="btn-custom-yellow btn-sm">Details</a>
-                    }
-                    else
-                    {
-                        <a asp-action="Details" asp-route-id="@item.ViolationId" class="btn-custom-yellow btn-sm">Details</a>
-                    }
-             
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr class="violation-row" onclick="window.location.href='@Url.Action("Details", new { id = item.ViolationId })';">
+                <td>@Html.DisplayFor(modelItem => item.ViolationId)</td>
+                <td>@Html.DisplayFor(modelItem => item.User.LicensePlate)</td>
+                <td>@Html.DisplayFor(modelItem => item.ViolationType)</td>
+                <td>$@Html.DisplayFor(modelItem => item.FineAmount)</td>
+                <td>@item.DateIssued.ToString("yyyy-MM-dd hh:mm tt")</td>
+                <td>@item.DateIssued.AddMonths(1).ToString("yyyy-MM-dd hh:mm tt")</td>
+                <td>@Html.DisplayFor(modelItem => item.IsPaid)</td>
+                @if (User.IsInRole("Administrator") || User.IsInRole("Officer"))
+                {
+                    <td>
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.ViolationId" class="btn btn-primary btn-sm">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.ViolationId" class="btn btn-secondary btn-sm">Delete</a>
+                        }
+                        else if (User.IsInRole("Officer"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.ViolationId" class="btn btn-primary btn-sm">Edit</a>
+                        }
+                    </td>
+                }
+            </tr>
+        }
     </tbody>
 </table>
+
+<style>
+    .violation-row {
+        cursor: pointer;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .violation-row:hover {
+        transform: scale(1.02);
+        box-shadow: 3px 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .sortable {
+        cursor: pointer;
+    }
+</style>

@@ -23,22 +23,22 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.User.LicensePlate)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Violation Type
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ViolationType)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Fine Amount
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             $@Html.DisplayFor(model => model.FineAmount)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Date Issued
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Model.DateIssued.ToString("yyyy-MM-dd hh:mm tt")
         </dd>
         <dt class="col-sm-2">
@@ -47,30 +47,33 @@
         <dd class="col-sm-10">
             @Model.DateIssued.AddMonths(1).ToString("yyyy-MM-dd hh:mm tt")
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Paid
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IsPaid)
         </dd>
     </dl>
 </div>
+
 <div>
     @if (User.IsInRole("Administrator"))
     {
-        <a asp-action="Edit" asp-route-id="@Model?.ViolationId">Edit</a>
+        <a asp-action="Edit" asp-route-id="@Model?.ViolationId" class="btn btn-primary">Edit</a>
+
         @if (!Model.IsPaid)
         {
-            <form method="post" action="@Url.Action("CreateCheckoutSession", "Payment", new { violationId = Model.ViolationId })">
-                <button type="submit" class="btn btn-primary">Pay Fine</button>
+            <form method="post" action="@Url.Action("CreateCheckoutSession", "Payment", new { violationId = Model.ViolationId })" class="d-inline">
+                <button type="submit" class="btn btn-info ms-2">Pay Fine</button>
             </form>
         }
-        <a asp-action="Index">Back to List</a>
+
+        <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
     }
     else if (User.IsInRole("Officer"))
     {
-        <a asp-action="Edit" asp-route-id="@Model?.ViolationId">Edit</a>
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Edit" asp-route-id="@Model?.ViolationId" class="btn btn-primary">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
     }
     else
     {
@@ -79,8 +82,9 @@
             var paymentDeadline = Model.DateIssued.AddMonths(1);
             var isLate = DateTime.Now > paymentDeadline;
 
-            <form method="post" action="@Url.Action("CreateCheckoutSession", "Payment", new { violationId = Model.ViolationId })">
-                <button type="submit" class="btn btn-primary" @(isLate ? "disabled" : "")>Pay Fine</button>
+            <form method="post" action="@Url.Action("CreateCheckoutSession", "Payment", new { violationId = Model.ViolationId })" class="d-inline">
+                <button type="submit" class="btn @(isLate ? "btn-default" : "btn-info") me-2" @(isLate ? "disabled" : "")>Pay Fine</button>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
             </form>
 
             @if (isLate)
@@ -88,6 +92,6 @@
                 <p class="text-danger mt-2"><strong>This fine is overdue.</strong> Please proceed to the Traffic Violations Office to settle your payment as soon as possible.</p>
             }
         }
-        <a asp-action="Index">Back to List</a>
+
     }
 </div>

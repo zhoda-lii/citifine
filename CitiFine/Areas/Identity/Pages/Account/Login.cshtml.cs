@@ -143,13 +143,13 @@ namespace CitiFine.Areas.Identity.Pages.Account
                     await _signInManager.SignInWithClaimsAsync(user, Input.RememberMe, claims);
                     
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return RedirectToPage("/Violations/Index");
                 }
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return RedirectToPage("/Violations/Index");
                 }
                 if (result.RequiresTwoFactor)
                 {
