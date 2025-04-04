@@ -9,3 +9,23 @@ In many locations, especially in remote, rural, or developing areas, traffic man
 - zhoda-lii
 - AronLimos
 - kianaaxd
+
+## Officer/Admin Credentials
+
+- Officer User (Email and Password)
+
+```
+user2@test.com
+```
+```
+Test@123
+```
+
+- Admin User (Email and Password)
+
+```
+user3@test.com
+```
+```
+Test@123
+```
